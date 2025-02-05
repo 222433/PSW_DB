@@ -5,7 +5,7 @@
 -- Dumped from database version 17.2 (Debian 17.2-1.pgdg120+1)
 -- Dumped by pg_dump version 17.2
 
--- Started on 2025-02-03 22:34:14 UTC
+-- Started on 2025-02-05 17:26:28 UTC
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -39,7 +39,7 @@ CREATE TABLE public.evaluation (
 ALTER TABLE public.evaluation OWNER TO "rootDB";
 
 --
--- TOC entry 224 (class 1259 OID 24620)
+-- TOC entry 218 (class 1259 OID 16390)
 -- Name: evaluation_id_seq; Type: SEQUENCE; Schema: public; Owner: rootDB
 --
 
@@ -56,7 +56,7 @@ ALTER SEQUENCE public.evaluation_id_seq OWNER TO "rootDB";
 
 --
 -- TOC entry 3395 (class 0 OID 0)
--- Dependencies: 224
+-- Dependencies: 218
 -- Name: evaluation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rootDB
 --
 
@@ -64,7 +64,7 @@ ALTER SEQUENCE public.evaluation_id_seq OWNED BY public.evaluation.id;
 
 
 --
--- TOC entry 218 (class 1259 OID 16390)
+-- TOC entry 219 (class 1259 OID 16391)
 -- Name: file; Type: TABLE; Schema: public; Owner: rootDB
 --
 
@@ -78,7 +78,7 @@ CREATE TABLE public.file (
 ALTER TABLE public.file OWNER TO "rootDB";
 
 --
--- TOC entry 223 (class 1259 OID 24611)
+-- TOC entry 220 (class 1259 OID 16396)
 -- Name: file_id_seq; Type: SEQUENCE; Schema: public; Owner: rootDB
 --
 
@@ -95,7 +95,7 @@ ALTER SEQUENCE public.file_id_seq OWNER TO "rootDB";
 
 --
 -- TOC entry 3396 (class 0 OID 0)
--- Dependencies: 223
+-- Dependencies: 220
 -- Name: file_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rootDB
 --
 
@@ -103,23 +103,22 @@ ALTER SEQUENCE public.file_id_seq OWNED BY public.file.id;
 
 
 --
--- TOC entry 219 (class 1259 OID 16395)
+-- TOC entry 221 (class 1259 OID 16397)
 -- Name: submission; Type: TABLE; Schema: public; Owner: rootDB
 --
 
 CREATE TABLE public.submission (
     moodle_sub_id bigint NOT NULL,
-    status text,
     time_created date,
-    submisionfileid bigint,
-    id integer NOT NULL
+    id integer NOT NULL,
+    assignment_id integer
 );
 
 
 ALTER TABLE public.submission OWNER TO "rootDB";
 
 --
--- TOC entry 221 (class 1259 OID 24595)
+-- TOC entry 222 (class 1259 OID 16402)
 -- Name: submission_id_seq; Type: SEQUENCE; Schema: public; Owner: rootDB
 --
 
@@ -136,7 +135,7 @@ ALTER SEQUENCE public.submission_id_seq OWNER TO "rootDB";
 
 --
 -- TOC entry 3397 (class 0 OID 0)
--- Dependencies: 221
+-- Dependencies: 222
 -- Name: submission_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rootDB
 --
 
@@ -144,7 +143,7 @@ ALTER SEQUENCE public.submission_id_seq OWNED BY public.submission.id;
 
 
 --
--- TOC entry 220 (class 1259 OID 16400)
+-- TOC entry 223 (class 1259 OID 16403)
 -- Name: submissionfile; Type: TABLE; Schema: public; Owner: rootDB
 --
 
@@ -158,7 +157,7 @@ CREATE TABLE public.submissionfile (
 ALTER TABLE public.submissionfile OWNER TO "rootDB";
 
 --
--- TOC entry 222 (class 1259 OID 24604)
+-- TOC entry 224 (class 1259 OID 16406)
 -- Name: submissionfile_id_seq; Type: SEQUENCE; Schema: public; Owner: rootDB
 --
 
@@ -175,7 +174,7 @@ ALTER SEQUENCE public.submissionfile_id_seq OWNER TO "rootDB";
 
 --
 -- TOC entry 3398 (class 0 OID 0)
--- Dependencies: 222
+-- Dependencies: 224
 -- Name: submissionfile_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rootDB
 --
 
@@ -183,7 +182,7 @@ ALTER SEQUENCE public.submissionfile_id_seq OWNED BY public.submissionfile.id;
 
 
 --
--- TOC entry 3225 (class 2604 OID 24621)
+-- TOC entry 3225 (class 2604 OID 16407)
 -- Name: evaluation id; Type: DEFAULT; Schema: public; Owner: rootDB
 --
 
@@ -191,7 +190,7 @@ ALTER TABLE ONLY public.evaluation ALTER COLUMN id SET DEFAULT nextval('public.e
 
 
 --
--- TOC entry 3226 (class 2604 OID 24612)
+-- TOC entry 3226 (class 2604 OID 16408)
 -- Name: file id; Type: DEFAULT; Schema: public; Owner: rootDB
 --
 
@@ -199,7 +198,7 @@ ALTER TABLE ONLY public.file ALTER COLUMN id SET DEFAULT nextval('public.file_id
 
 
 --
--- TOC entry 3227 (class 2604 OID 24596)
+-- TOC entry 3227 (class 2604 OID 16409)
 -- Name: submission id; Type: DEFAULT; Schema: public; Owner: rootDB
 --
 
@@ -207,7 +206,7 @@ ALTER TABLE ONLY public.submission ALTER COLUMN id SET DEFAULT nextval('public.s
 
 
 --
--- TOC entry 3228 (class 2604 OID 24605)
+-- TOC entry 3228 (class 2604 OID 16410)
 -- Name: submissionfile id; Type: DEFAULT; Schema: public; Owner: rootDB
 --
 
@@ -225,8 +224,8 @@ COPY public.evaluation (submission_id, grade, comment, id) FROM stdin;
 
 
 --
--- TOC entry 3383 (class 0 OID 16390)
--- Dependencies: 218
+-- TOC entry 3384 (class 0 OID 16391)
+-- Dependencies: 219
 -- Data for Name: file; Type: TABLE DATA; Schema: public; Owner: rootDB
 --
 
@@ -235,22 +234,16 @@ COPY public.file (name, path, id) FROM stdin;
 
 
 --
--- TOC entry 3384 (class 0 OID 16395)
--- Dependencies: 219
+-- TOC entry 3386 (class 0 OID 16397)
+-- Dependencies: 221
 -- Data for Name: submission; Type: TABLE DATA; Schema: public; Owner: rootDB
 --
 
-COPY public.submission (moodle_sub_id, status, time_created, submisionfileid, id) FROM stdin;
-0	string	2025-01-01	\N	1
-0	string	2025-01-01	\N	2
-12	string	2025-01-01	\N	3
-1	asd	2025-01-01	1	4
-\.
-
+COPY public.submission (moodle_sub_id, time_created, id, assignment_id) FROM stdin;
 
 --
--- TOC entry 3385 (class 0 OID 16400)
--- Dependencies: 220
+-- TOC entry 3388 (class 0 OID 16403)
+-- Dependencies: 223
 -- Data for Name: submissionfile; Type: TABLE DATA; Schema: public; Owner: rootDB
 --
 
@@ -260,7 +253,7 @@ COPY public.submissionfile (submission_id, file_id, id) FROM stdin;
 
 --
 -- TOC entry 3399 (class 0 OID 0)
--- Dependencies: 224
+-- Dependencies: 218
 -- Name: evaluation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rootDB
 --
 
@@ -269,7 +262,7 @@ SELECT pg_catalog.setval('public.evaluation_id_seq', 1, false);
 
 --
 -- TOC entry 3400 (class 0 OID 0)
--- Dependencies: 223
+-- Dependencies: 220
 -- Name: file_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rootDB
 --
 
@@ -278,7 +271,7 @@ SELECT pg_catalog.setval('public.file_id_seq', 1, false);
 
 --
 -- TOC entry 3401 (class 0 OID 0)
--- Dependencies: 221
+-- Dependencies: 222
 -- Name: submission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rootDB
 --
 
@@ -287,7 +280,7 @@ SELECT pg_catalog.setval('public.submission_id_seq', 4, true);
 
 --
 -- TOC entry 3402 (class 0 OID 0)
--- Dependencies: 222
+-- Dependencies: 224
 -- Name: submissionfile_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rootDB
 --
 
@@ -295,7 +288,7 @@ SELECT pg_catalog.setval('public.submissionfile_id_seq', 1, false);
 
 
 --
--- TOC entry 3230 (class 2606 OID 24628)
+-- TOC entry 3230 (class 2606 OID 16412)
 -- Name: evaluation evaluation_pkey; Type: CONSTRAINT; Schema: public; Owner: rootDB
 --
 
@@ -304,7 +297,7 @@ ALTER TABLE ONLY public.evaluation
 
 
 --
--- TOC entry 3232 (class 2606 OID 24619)
+-- TOC entry 3232 (class 2606 OID 16414)
 -- Name: file file_pkey; Type: CONSTRAINT; Schema: public; Owner: rootDB
 --
 
@@ -313,7 +306,7 @@ ALTER TABLE ONLY public.file
 
 
 --
--- TOC entry 3234 (class 2606 OID 24603)
+-- TOC entry 3234 (class 2606 OID 16416)
 -- Name: submission submission_pkey; Type: CONSTRAINT; Schema: public; Owner: rootDB
 --
 
@@ -322,7 +315,7 @@ ALTER TABLE ONLY public.submission
 
 
 --
--- TOC entry 3236 (class 2606 OID 24610)
+-- TOC entry 3236 (class 2606 OID 16418)
 -- Name: submissionfile submissionfile_pkey; Type: CONSTRAINT; Schema: public; Owner: rootDB
 --
 
@@ -330,7 +323,7 @@ ALTER TABLE ONLY public.submissionfile
     ADD CONSTRAINT submissionfile_pkey PRIMARY KEY (id);
 
 
--- Completed on 2025-02-03 22:34:14 UTC
+-- Completed on 2025-02-05 17:26:28 UTC
 
 --
 -- PostgreSQL database dump complete
